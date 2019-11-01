@@ -82,10 +82,10 @@ clear h_uca
 % Receiver 3 example: Measured HRTFs (MAKE SURE THAT THEY ARE THE SAME
 % SAMPLERATE AS THE REST OR RESAMPLE)
 disp('Loading measured HRTF responses')
-load('APolitis_ownsurround_sim2016.mat','hrtf_dirs','hrtf_mtx')
-grids{3} = hrtf_dirs*pi/180;
-array_irs{3} = hrtf_mtx;
-clear hrtf_mtx hrtf_dirs
+load('APolitis_ownsurround2016_L512_N836_48k.mat','hrtf_dirs_deg_aziElev','hrirs')
+grids{3} = hrtf_dirs_deg_aziElev*pi/180;
+array_irs{3} = hrirs;
+clear hrirs hrtf_dirs_deg_aziElev
 
 %% RUN SIMULATOR %%%
 %%% Echogram
