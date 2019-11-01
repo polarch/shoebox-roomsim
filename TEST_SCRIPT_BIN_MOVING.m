@@ -1,5 +1,5 @@
 %% SETUP
-datapath = '/Volumes/MACBOOK_SD_64GB/GDrive_polarch/Audio/HRTFs/converted/';
+datapath = '~/Downloads/';
 addpath(datapath);
 
 % room definition
@@ -57,7 +57,7 @@ tic
 
 % limit the RIR by reflection order or by time-limit
 type = 'maxTime';
-maxlim = 1.5; % just cut if it's longer than that ( or set to max(rt60) )
+maxlim = 0.5; % just cut if it's longer than that ( or set to max(rt60) )
 for nb = 1:nBands
     if (rt60(nb)<maxlim) limits(nb) = rt60(nb);
     else limits(nb,1) = maxlim;
