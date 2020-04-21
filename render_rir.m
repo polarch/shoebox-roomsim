@@ -50,7 +50,9 @@ else
     IR = zeros(ceil(endtime*fs), size(echogram.value,2));
     % quantized indices of reflections
     refl_idx = round(echogram.time(1:idx_trans)*fs) + 1;
-    % copy reflection amplitudes to array
-    IR(refl_idx,:) = echogram.value(1:idx_trans,:);
+    % sum reflection amplitudes to for each index
+    for i=1:idx_trans
+        IR(refl_idx(i),:) = IR(refl_idx(i),:) + echogram.value(i,:);
+    end
 
 end
