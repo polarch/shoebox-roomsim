@@ -13,7 +13,7 @@ function rt60 = revTime(room, alpha, method)
             Sz = L*W;
             A = Sx*(alpha(1) + alpha(2)) + Sy*(alpha(3) + alpha(4)) + ...
                 Sz*(alpha(5) + alpha(6));
-            rt60 = 0.161*(V/A);        
+            rt60 = 0.161*(V/A);
 
         case 'norriseyring'
             V = L*W*H;

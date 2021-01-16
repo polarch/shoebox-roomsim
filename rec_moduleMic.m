@@ -6,6 +6,7 @@ function rec_echograms = rec_moduleMic(echograms, mic_specs)
 %               x,y,z unit vector showing the orientation of each mic
 %               a=0~1 is the directivity coeff d(theta) = a + (1-a)*cos(theta)
 %               a=1 is omni, a=0 is dipole, a=0.5 is cardioid, etc...
+%               you can also leave empty for omni receivers
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -16,6 +17,9 @@ function rec_echograms = rec_moduleMic(echograms, mic_specs)
 
 nSrc = size(echograms,1);
 nRec = size(echograms,2);
+if nargin<2 || isempty(mic_specs)
+    mic_specs = ones(nRec,4);
+end
 nSpecs = size(mic_specs,1);
 
 if (nRec ~= nSpecs)
@@ -27,7 +31,7 @@ mic_coeffs = mic_specs(:,4);
 
 rec_echograms = echograms;
 % do nothing if all receivers are omnis
-if (all(mic_coeffs==1) == 0)
+if ~all(mic_coeffs==1)
     
     for ns=1:nSrc
         for nr=1:nRec      

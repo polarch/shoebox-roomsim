@@ -14,8 +14,12 @@ for ns=1:nSrc
     end
 end
 % apply receiver directivities (this can be omitted too if all omni sensors)
-disp('Apply receiver direcitivites')
-rec_echograms = rec_moduleMic(echograms, mic_specs);
+if nargin==6
+    disp('Apply receiver direcitivites')
+    rec_echograms = rec_moduleMic(echograms, mic_specs);
+else
+    rec_echograms = echograms;
+end
 
 % apply boundary absorption
 for ns = 1:nSrc

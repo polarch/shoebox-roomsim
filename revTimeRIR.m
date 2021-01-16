@@ -13,14 +13,14 @@ rt_interval_db = 30;
 t = (0:size(H,1))/fs;
 for nr=1:nRIR
     h = H(:,nr)/max(abs(H(:,nr)));
-    edc = flipud(cumsum(flipud(h.^2)));
     % cumulative tail energy
-    h_flip = h(end:-1:1);
-    edc(1) = h_flip(1).^2;
-    for l=2:lRIR
-        edc(l) = edc(l-1) + h_flip(l).^2;
-    end
-    edc = edc(end:-1:1);
+%     h_flip = h(end:-1:1);
+%     edc(1) = h_flip(1).^2;
+%     for l=2:lRIR
+%         edc(l) = edc(l-1) + h_flip(l).^2;
+%     end
+%     edc = edc(end:-1:1);
+    edc = flipud(cumsum(flipud(h.^2))); % faster
     edc = edc/edc(1);    % normalized EDC
     edc_db = 10*log10(edc);
     % find line params y+ax+b

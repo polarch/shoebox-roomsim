@@ -1,4 +1,4 @@
-function IR = render_rir(echogram, endtime, fs, FRACTIONAL)
+function IR = render_rir(echogram, endtime, fs, FRACTIONAL, RAND_IMS, rand_ims_dels)
 %RENDER_RIR Samples the echogram to a specified sample rate.
 %   echogram:       the echogram structure
 %   endtime:        time in secs for desired length of the impulse response
@@ -12,6 +12,8 @@ function IR = render_rir(echogram, endtime, fs, FRACTIONAL)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+if nargin<5, RAND_IMS = 0; end
+if nargin<4, FRACTIONAL = 1; end
 
 % number of reflections inside the time limit
 idx_trans = find(echogram.time<endtime, 1, 'last');
@@ -34,8 +36,13 @@ if FRACTIONAL
     for i=1:idx_trans
 
         % select appropriate fractional delay filter
-        refl_idx = floor(echogram.time(i)*fs) + 1;
-        refl_frac = mod(echogram.time(i)*fs,1);
+        if RAND_IMS
+            refl_idx = floor((echogram.time(i)+rand_ims_dels(i))*fs) + 1;
+            refl_frac = mod((echogram.time(i)+rand_ims_dels(i))*fs,1);
+        else 
+            refl_idx = floor(echogram.time(i)*fs) + 1;
+            refl_frac = mod(echogram.time(i)*fs,1);
+        end
         [~, filter_idx] = min(abs(refl_frac-fractions));
         h_frac = H_frac(:, filter_idx);
 %        h_frac = lagrangeK(order, 50 + refl_frac);
@@ -49,8 +56,12 @@ else
     % initialise array
     IR = zeros(ceil(endtime*fs), size(echogram.value,2));
     % quantized indices of reflections
-    refl_idx = round(echogram.time(1:idx_trans)*fs) + 1;
-    % sum reflection amplitudes to for each index
+    if RAND_IMS
+        refl_idx = round((echogram.time(1:idx_trans)+rand_ims_dels(1:idx_trans))*fs) + 1;
+    else
+        refl_idx = round(echogram.time(1:idx_trans)*fs) + 1;
+    end
+    % sum reflection amplitudes for each index
     for i=1:idx_trans
         IR(refl_idx(i),:) = IR(refl_idx(i),:) + echogram.value(i,:);
     end
